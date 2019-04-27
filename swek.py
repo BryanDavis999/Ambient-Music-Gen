@@ -3,8 +3,10 @@ import os
 import math
 
 MODEL = "hierdec-mel_16bar"
-RDir = "Samples2"
+RDir = "temp"
 IDir = "Samples3"
+os.mkdirs(RDir)
+os.makedirs(IDir)
 
 #NOTE : Req folder Music_VAE_models containing requistite MODEL
 
@@ -13,6 +15,26 @@ IntString = "music_vae_generate --config={0} --checkpoint_file=Music_VAE_models/
 
 def generate(n){ os.system(GenString.format(MODEL, n, RDir)) }
 def interpol(n, f1, f2){ os.system(GenString.format(MODEL, n, ,IDir, f1, f2))}
+
+def tempo_checker():
+	tempo_check = 100
+	location = "temp"
+	cd = os.listdir(location)
+	if '.DS_Store' in cd : cd.remove('.DS_Store') #MAC specific file removal
+	for i in cd:
+		fulloc = location+'/'+i
+		print(fulloc)
+		mid = MidiFile(fulloc)
+		x = [i.time for i in mid.tracks[1]]
+		tempo = sum(x)/len(x)
+
+		if tempo >= tempo_check:
+			outputDirectory = "High"
+		else:
+			outputDirectory = "Low"
+
+		shutil.move(fulloc, outputDirectory)
+		print("Song: {}\t Avg Tempo : {}\t OutputDirectory : {}".format(fulloc,round(tempo,2),outputDirectory))
 
 #---------------------------------------------------------------------------------
 
@@ -55,12 +77,10 @@ def filter_tempo(location):
         '''
         
 def rand_sample_10():
-    #os.mkdirs(IDir)
     string = "music_vae_generate --config={0} --checkpoint_file=Music_VAE_models/{0}.tar --mode=sample --num_outputs=10 --output_dir={1}".format(MODEL,RDir)
     os.system(string)
     
 def interpolate_2(file1,file2):
-    #os.makedirs(IDir)
     string = "music_vae_generate --config={0} --checkpoint_file=Music_VAE_models/{0}.tar --mode=interpolate --num_outputs=10 --input_midi_1={1} --input_midi_2={2} --output_dir={3}".format(MODEL, RDir+file1, RDir+file2, IDir)
     os.system(string)
     
