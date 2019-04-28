@@ -34,6 +34,5 @@ while True:
     end_time = time.time()+5
     while time.time()<end_time:
         s+=int(ser.readline().decode())
-    
+
     print(s)
-    
