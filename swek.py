@@ -4,6 +4,7 @@ from mido import MidiFile
 import os
 import math
 import time
+from threading import Thread
 
 MODEL = "hierdec-mel_16bar"
 
@@ -30,7 +31,9 @@ def fill_buffer():
         if Blen < BThresh:
             generate(BThresh-Blen, BDir)
         time.sleep(5)
-fill_buffer()
+
+t1 = Thread(target="fill_buffer")
+t1.start()
 
 def tempo_checker():
 	tempo_check = 100
