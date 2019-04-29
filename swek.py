@@ -1,3 +1,5 @@
+#! /usr/bin/python3
+
 from mido import MidiFile
 import os
 import math
