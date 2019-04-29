@@ -37,7 +37,7 @@ t1.start()
 
 def tempo_checker():
 	tempo_check = 100
-	location = "temp"
+	location = "Raw_Buffer"
 	cd = os.listdir(location)
 	if '.DS_Store' in cd : cd.remove('.DS_Store') #MAC specific file removal
 	for i in cd:

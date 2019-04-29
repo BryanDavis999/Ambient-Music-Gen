@@ -7,4 +7,5 @@ Piano_Samples
 geckodriver.log
 *samples
 *Samples
-Raw_Buffer
+raw_buffer
+notes.txt
