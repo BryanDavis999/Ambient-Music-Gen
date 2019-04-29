@@ -5,7 +5,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
 import time
 
-driver = webdriver.Firefox()
+driver = webdriver.Safari()
 driver.get("https://www.dcode.fr/music-sheet")
 elem = driver.find_element_by_id("convert_from_abc_to_sheet_notes_abc")
 print(elem)
