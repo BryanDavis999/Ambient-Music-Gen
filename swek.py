@@ -1,20 +1,34 @@
 from mido import MidiFile
 import os
 import math
+import time
 
 MODEL = "hierdec-mel_16bar"
+
 RDir = "temp"
 IDir = "Samples3"
-os.mkdirs(RDir)
-os.makedirs(IDir)
+os.makedirs(RDir, exist_ok=True)
+os.makedirs(IDir, exist_ok=True)
+
+BDir = "raw_buffer"
+os.makedirs(BDir, exist_ok=True)
+BThresh = 20
 
 #NOTE : Req folder Music_VAE_models containing requistite MODEL
 
 GenString = "music_vae_generate --config={0} --checkpoint_file=Music_VAE_models/{0}.tar --mode=sample --num_outputs={1} --output_dir={2}"
 IntString = "music_vae_generate --config={0} --checkpoint_file=Music_VAE_models/{0}.tar --mode=interpolate --num_outputs={1} --input_midi_1={3} --input_midi_2={4} --output_dir={2}"
 
-def generate(n) : os.system(GenString.format(MODEL, n, RDir))
-def interpol(n, f1, f2) : os.system(GenString.format(MODEL, n, ,IDir, f1, f2))
+def generate(n, outDir) : os.system(GenString.format(MODEL, n, outDir))
+def interpolate(n, outDir, f1, f2) : os.system(GenString.format(MODEL, n ,outDir, f1, f2))
+
+def fill_buffer():
+    while True:
+        Blen = len(os.listdir(BDir))
+        if Blen < BThresh:
+            generate(BThresh-Blen, BDir)
+        time.sleep(5)
+fill_buffer()
 
 def tempo_checker():
 	tempo_check = 100
@@ -38,6 +52,7 @@ def tempo_checker():
 
 #---------------------------------------------------------------------------------
 
+'''
 mid = MidiFile('Trio_Samples/samples/hierdec-trio_16bar_sample_2019-04-19_115005-001-of-002.mid')
 for j in mid.tracks:
     print("\n{} :".format(j))
@@ -54,6 +69,8 @@ for j in mid.tracks:
     #print(sum(x)/len(x), end='')
     #print(sum(x[:30])/30, end='')
     #print(sum(x[-30:])/30)
+
+'''
 
 #---------------------------------------------------------------------------------
 
