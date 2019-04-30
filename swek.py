@@ -76,7 +76,7 @@ def fill_buffers():
         time.sleep(5)
 
 t1 = Thread(target = fill_buffers)
-# t1.start()
+t1.start()
 #---------------------------------------------------------------
 
 #--------------------------------------------------------------- THREAD 2
@@ -103,7 +103,7 @@ def mood_filter():
     ser = serial.Serial(port, 9600)
     while True:
         s=0
-        end_time = time.time()+30
+        end_time = time.time()+10
         while time.time()<end_time:
             s+=int(ser.readline().decode())
         print(s)
@@ -111,8 +111,11 @@ def mood_filter():
         file_loc = FDir +'/'+ target
         file_loc += os.listdir(file_loc)[1]
         print(file_loc)
+
         os.system("mscore -o " + "swek.pdf "+ file_loc)
         os.system("xdg-open swek.pdf")
+        os.system("vlc --play-and-exit "+file_loc)
+        os.remove(file_loc)
         '''
         dest_loc = playlist+"/"+str(PNext)+".mid"
         PNext+=1
