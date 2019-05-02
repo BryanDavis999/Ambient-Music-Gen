@@ -4,7 +4,9 @@ from mido import MidiFile
 import os
 import math
 import time
+import shutil
 from threading import Thread
+import random
 
 import serial
 import serial.tools.list_ports
@@ -97,15 +99,19 @@ def get_arduino_port():
 
 def mood_filter():
     print("\n")
-    port = get_arduino_port()
-    print("Arduino found in " + port)
+    #port = get_arduino_port()
+    #print("Arduino found in " + str(port))
 
-    ser = serial.Serial(port, 9600)
+    #ser = serial.Serial(port, 9600)
     while True:
         s=0
-        end_time = time.time()+10
-        while time.time()<end_time:
-            s+=int(ser.readline().decode())
+        #end_time = time.time()+1
+        #while time.time()<end_time:
+            # s = 1000
+            # print("sampled")
+            # s+=int(ser.readline().decode())
+        time.sleep(0.5)
+        s = random.random()*10 + 10
         print(s)
         target = "high/" if s>NThresh else "low/"
         file_loc = FDir +'/'+ target
@@ -114,8 +120,13 @@ def mood_filter():
 
         os.system("mscore -o " + "swek.pdf "+ file_loc)
         os.system("xdg-open swek.pdf")
-        os.system("vlc --play-and-exit "+file_loc)
-        os.remove(file_loc)
+        os.system("cvlc --play-and-exit "+file_loc)
+        # os.remove(file_loc)
+        shutil.move(file_loc,"playlist")
+        dest_loc = str(PNext)+".mid"
+        PNext += 1
+        os.rename("playlist/"+file_loc, "playlist/"+dest_loc)
+        # shutil.move(dest_loc, )
         '''
         dest_loc = playlist+"/"+str(PNext)+".mid"
         PNext+=1
